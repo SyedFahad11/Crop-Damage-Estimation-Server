@@ -2,15 +2,33 @@ var ee = require('@google/earthengine');
 const { json } = require('body-parser');
 const {make_map_image}=require('./map_images');
 
-async function calculateArea(districtName) {
+async function calculateArea(features) {
     return new Promise(async (resolve, reject) => {
       try {
-        if(districtName){
+        if(features){
 
-        
-    var districts =  ee.FeatureCollection("users/karanknit/india_dist_sorted");
-    var ROI =  districts.filter(ee.Filter.eq('DISTRICT',districtName));
-    var landarea = ROI.geometry().area().divide(10000).getInfo();
+        console.log("features are this ",JSON.parse(features.gJSON))
+    // var districts =  ee.FeatureCollection("users/karanknit/india_dist_sorted");
+    const coordinates=JSON.parse(features.gJSON).geometry.coordinates;
+    
+    
+    var currentProjection = ee.Projection('EPSG:3857');
+    var desiredProjection = ee.Projection('EPSG:4326');
+    
+    var PREROI = ee.Geometry.MultiPolygon(coordinates, currentProjection);
+    
+    // Transform the geometry to the desired projection
+    var ROI = PREROI.transform(desiredProjection);
+    
+    // Print the result
+
+    
+    // Now you can use ROI in your analysis
+    
+      // var districts = await ee.FeatureCollection("users/karanknit/india_dist_sorted");
+      // var ROI = ee.Geometry.Polygon(coordinates);
+    // var ROI =  districts.filter(ee.Filter.eq('DISTRICT',districtName));
+    var landarea = ROI.area().divide(10000).getInfo();
     console.log("land area "+landarea);
     
     var start = '2018-08-10';
@@ -36,6 +54,7 @@ async function calculateArea(districtName) {
                     var connectedPixelThreshold = 8
                     var connections = flooded.connectedPixelCount()
                     flooded = flooded.updateMask(connections.gt(connectedPixelThreshold))
+                    // console.log("flooded ",flooded)
                     var stats = flooded.multiply(ee.Image.pixelArea()).multiply(0.0001).reduceRegion({
                       
                         reducer : ee.Reducer.sum(),

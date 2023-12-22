@@ -10,5 +10,6 @@ router.use(authMiddleware);
 router.post('/store', dataController.storeData);
 router.get('/get', dataController.getData);
 router.delete('/delete/:dataId', dataController.deleteData);
+router.post('/fetchflood',dataController.floodData);
 
 module.exports = router;

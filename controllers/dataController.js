@@ -26,6 +26,18 @@ async function storeData(req, res) {
       res.status(500).send('Internal Server Error');
     }
   }
+  async function floodData(req,res){
+    var getArea =require('../authenticate');
+    if(req.body){
+      // const districtName=req.body.districtName.toUpperCase();
+      console.log(req.body);
+      var ans=await getArea(req.body);
+      res.json(ans);
+    }
+    else{
+      res.json("Send a valid name");
+    }
+  }
   
   async function deleteData(req, res) {
     const { dataId } = req.params;
@@ -39,4 +51,4 @@ async function storeData(req, res) {
     }
   }
 
-module.exports = { storeData, getData, deleteData };
+module.exports = { storeData, getData, deleteData,floodData };
