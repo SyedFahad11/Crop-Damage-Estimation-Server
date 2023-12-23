@@ -31,8 +31,8 @@ async function calculateArea(features) {
     var landarea = ROI.area().divide(10000).getInfo();
     console.log("land area "+landarea);
     
-    var start = '2018-08-10';
-    var end = '2018-08-23';
+    var start = features.sd;
+    var end = features.ed;
     var scale = 10
     var export_folder = 'FloodMapping'
     
