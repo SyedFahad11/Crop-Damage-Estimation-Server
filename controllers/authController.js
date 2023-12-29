@@ -7,8 +7,9 @@ async function register(req, res) {
 
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = new User({ username, password: hashedPassword });
+    const user = new User({ username:username, password: hashedPassword });
     await user.save();
+    console.log("user created ",user);
     res.status(201).send('User registered successfully.');
   } catch (error) {
     console.error(error);
@@ -26,10 +27,12 @@ async function login(req, res) {
       console.log("User not found")
       return res.status(401).send('Invalid credentials');
     }
-
+    console.log(password)
+    console.log(user.password)
     const isPasswordValid = await bcrypt.compare(password, user.password);
-
+    
     if (!isPasswordValid) {
+      console.log("password not valid")
       return res.status(401).send('Invalid credentials');
     }
 
