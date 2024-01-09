@@ -71,7 +71,7 @@ function make_map_image (roi, start, end, scale, export_folder) {
      var f_collection= make_collections(roi, start, end, basestart, baseend)
     // z_collecru
     z_collection=f_collection[0];
-    s1_collection=f_collection[0];
+    s1_collection=f_collection[1];
     var z_image= z_collection.filterDate(start, end).mosaic()
     var s1_image  =s1_collection.filterDate(start, end).mosaic()
     
